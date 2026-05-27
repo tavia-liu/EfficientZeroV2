@@ -5,6 +5,7 @@ from .gym import GymWrapper
 from .atari import AtariWrapper
 from .dmc import DMCWrapper
 from .wrapper import *
+from . import octax_env  # noqa: F401  registers Octax-*-v0 gym envs
 import random
 from dm_env import specs
 from ez.utils.format import arr_to_str
