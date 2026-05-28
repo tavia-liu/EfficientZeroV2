@@ -681,7 +681,7 @@ def train_ddp(agent, rank, replay_buffer, storage, batch_storage, logger):
             name=wandb_name,
             project=agent.config.wandb.project,
             group=agent.config.wandb.group,
-            tags=[agent.config.env.game],
+            job_type=agent.config.env.game,
             # config=config,
         )
     assert agent._update

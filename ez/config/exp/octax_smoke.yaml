@@ -42,7 +42,7 @@ train:
   load_model_path: ''
   batch_size: 256
   training_steps: 200
-  offline_training_steps: 20000
+  offline_training_steps: 200
   start_transitions: 200
 
   eval_n_episode: 2

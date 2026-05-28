@@ -67,7 +67,7 @@ def start_ddp_trainer(rank, config):
                 name=wandb_name,
                 project=config.wandb.project,
                 group=config.wandb.group,
-                tags=[config.env.game],
+                job_type=config.env.game,
                 config=OmegaConf.to_container(config, resolve=True),
             )
         else:
