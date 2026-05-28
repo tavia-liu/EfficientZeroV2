@@ -11,7 +11,7 @@ env:
   max_episode_steps: 4500
   gray_scale: True         # CHIP-8 is binary 1-bit, single channel
   image_based: True
-  clip_reward: False       # Octax score-diff rewards already small
+  clip_reward: True      
   obs_shape: [1, 32, 64]   # native CHIP-8 (C=1, H=32, W=64)
   episodic: True
 
