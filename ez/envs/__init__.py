@@ -140,18 +140,18 @@ def make_gym(game_name, seed, save_path=None, **kwargs):
 
 def make_octax(game_name, seed, save_path=None, **kwargs):
     """Make an Octax env using the Atari-style discrete image pipeline."""
-    import gymnasium
     obs_to_string = kwargs.get('obs_to_string')
     clip_reward = kwargs.get('clip_reward')
+    frame_skip = kwargs['n_skip'] if kwargs.get('n_skip') else 4
     max_episode_steps = kwargs['max_episode_steps'] if kwargs.get('max_episode_steps') else 4500
 
-    env = gymnasium.make(game_name)
-    env.reset(seed=seed)
-    env = OctaxWrapper(env, obs_to_string=obs_to_string)
-    env = TimeLimit(env, max_episode_steps=max_episode_steps)
+    env = OctaxWrapper(
+        game_name, seed=seed,
+        obs_to_string=obs_to_string, clip_reward=clip_reward,
+        frame_skip=frame_skip, max_episode_steps=max_episode_steps,
+    )
     if save_path:
         env = Monitor(env, directory=save_path, force=True)
-    env = AtariWrapper(env, obs_to_string=obs_to_string, clip_reward=clip_reward)
     return env
 
 
