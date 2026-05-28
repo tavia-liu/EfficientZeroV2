@@ -80,10 +80,9 @@ def join_workers(worker_lst, server_lst):
     # Ray actors run until the cluster shuts down; nothing to join here.
     print(f'[main process] All workers have stopped.')
 
-    # stop servers
-    storage_server.terminate()
-    replay_buffer_server.terminate()
-    watchdog_server.terminate()
-    smos_server.stop()
+    # stop servers (Ray actors use ray.kill, not .terminate())
+    ray.kill(storage_server)
+    ray.kill(replay_buffer_server)
+    ray.kill(watchdog_server)
     print(f'[main process] All servers have stopped.')
 
