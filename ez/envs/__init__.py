@@ -6,19 +6,22 @@ from .atari import AtariWrapper
 from .dmc import DMCWrapper
 from .wrapper import *
 from . import octax_env  # noqa: F401  registers Octax-*-v0 gym envs
+from .octax import OctaxWrapper
 import random
 from dm_env import specs
 from ez.utils.format import arr_to_str
 
 
 def make_envs(game_setting, game_name, num_envs, seed, save_path=None, **kwargs):
-    assert game_setting in ['Atari', 'DMC', 'Gym']
+    assert game_setting in ['Atari', 'DMC', 'Gym', 'Octax']
     if game_setting == 'Atari':
         _env_fn = make_atari
     elif game_setting == 'Gym':
         _env_fn = make_gym
     elif game_setting == 'DMC':
         _env_fn = make_dmc
+    elif game_setting == 'Octax':
+        _env_fn = make_octax
     else:
         raise NotImplementedError()
 
@@ -33,13 +36,15 @@ def make_envs(game_setting, game_name, num_envs, seed, save_path=None, **kwargs)
 
 
 def make_env(game_setting, game_name, num_envs, seed, save_path=None, **kwargs):
-    assert game_setting in ['Atari', 'DMC', 'Gym']
+    assert game_setting in ['Atari', 'DMC', 'Gym', 'Octax']
     if game_setting == 'Atari':
         _env_fn = make_atari
     elif game_setting == 'Gym':
         _env_fn = make_gym
     elif game_setting == 'DMC':
         _env_fn = make_dmc
+    elif game_setting == 'Octax':
+        _env_fn = make_octax
     else:
         raise NotImplementedError()
 
@@ -130,6 +135,22 @@ def make_gym(game_name, seed, save_path=None, **kwargs):
         env = Monitor(env, directory=save_path, force=True)
 
     env = GymWrapper(env, obs_to_string=obs_to_string)
+    return env
+
+
+def make_octax(game_name, seed, save_path=None, **kwargs):
+    """Make an Octax env using the Atari-style discrete image pipeline."""
+    obs_to_string = kwargs.get('obs_to_string')
+    clip_reward = kwargs.get('clip_reward')
+    max_episode_steps = kwargs['max_episode_steps'] if kwargs.get('max_episode_steps') else 4500
+
+    env = gym.make(game_name)
+    env = OctaxWrapper(env, obs_to_string=obs_to_string)
+    env.seed(seed)
+    env = TimeLimit(env, max_episode_steps=max_episode_steps)
+    if save_path:
+        env = Monitor(env, directory=save_path, force=True)
+    env = AtariWrapper(env, obs_to_string=obs_to_string, clip_reward=clip_reward)
     return env
 
 

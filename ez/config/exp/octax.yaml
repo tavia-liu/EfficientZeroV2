@@ -3,16 +3,16 @@ agent_name: octax_agent
 
 # env setting
 env:
-  env: Gym
+  env: Octax
   game: Octax-Brix-v0
   base_seed: 0
-  n_skip: 4
+  n_skip: 1
   n_stack: 4
-  max_episode_steps: 3000
-  gray_scale: False
+  max_episode_steps: 4500
+  gray_scale: True
   image_based: True
-  clip_reward: True
-  obs_shape: [3, 96, 96]
+  clip_reward: False
+  obs_shape: [1, 32, 64]
   episodic: True
 
 rl:
