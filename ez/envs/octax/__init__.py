@@ -16,3 +16,4 @@ class OctaxWrapper(BaseWrapper):
         obs = self.format_obs(obs)
         info["raw_reward"] = reward
         return obs, reward, terminated or truncated, info
+

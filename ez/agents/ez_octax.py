@@ -57,3 +57,4 @@ class EZOctaxAgent(EZAtariAgent):
         self.action_space_size = self.config.env.action_space_size
 
         self._update = True
+        
