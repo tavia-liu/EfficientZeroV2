@@ -27,7 +27,7 @@ class EZOctaxAgent(EZAtariAgent):
         value_size = value_support.size
 
         localtime = time.strftime('%Y-%m-%d %H:%M:%S')
-        tag = '{}-seed={}-{}/'.format(self.config.tag, self.config.env.base_seed, localtime)
+        tag = '{}-{}-seed={}-{}/'.format(self.config.tag, self.config.env.game, self.config.env.base_seed, localtime)
 
         with open_dict(self.config):
             self.config.env.action_space_size = action_space_size

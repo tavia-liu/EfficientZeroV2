@@ -144,4 +144,4 @@ actors:
 
 wandb:
   project: 'ez-v2-octax'
-  tag: 'Octax'
+  group: 'Octax'

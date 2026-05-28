@@ -61,11 +61,13 @@ def start_ddp_trainer(rank, config):
     if rank == 0:
         # wandb logger
         if config.ddp.training_size == 1:
-            wandb_name = config.env.game + '-' + config.wandb.tag
+            wandb_name = f'{config.env.game}-seed{config.env.base_seed}'
             print(f'wandb_name={wandb_name}')
             logger = wandb.init(
                 name=wandb_name,
                 project=config.wandb.project,
+                group=config.wandb.group,
+                tags=[config.env.game],
                 config=OmegaConf.to_container(config, resolve=True),
             )
         else:

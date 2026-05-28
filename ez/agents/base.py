@@ -676,10 +676,12 @@ class Agent:
 def train_ddp(agent, rank, replay_buffer, storage, batch_storage, logger):
     print(f'training_rank={rank}')
     if rank == 0:
-        wandb_name = agent.config.env.game + '-' + agent.config.wandb.tag
+        wandb_name = f'{agent.config.env.game}-seed{agent.config.env.base_seed}'
         logger = wandb.init(
             name=wandb_name,
             project=agent.config.wandb.project,
+            group=agent.config.wandb.group,
+            tags=[agent.config.env.game],
             # config=config,
         )
     assert agent._update
