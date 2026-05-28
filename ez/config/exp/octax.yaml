@@ -4,14 +4,14 @@ agent_name: octax_agent
 # env setting
 env:
   env: Octax
-  game: brix
-  base_seed: 0
+  game: ${oc.env:GAME,brix}
+  base_seed: ${oc.decode:${oc.env:SEED,0}}
   n_skip: 4
   n_stack: 4
   max_episode_steps: 4500
   gray_scale: True
   image_based: True
-  clip_reward: False
+  clip_reward: True
   obs_shape: [1, 32, 64]
   episodic: True
 
