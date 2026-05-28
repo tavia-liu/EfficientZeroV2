@@ -145,8 +145,10 @@ def eval(agent, model, n_episodes, save_path, config, max_steps=None, use_pb=Fal
             # save data to trajectory buffer
             game_trajs[i].store_search_results(values[i], r_values[i], r_policies[i])
             game_trajs[i].append(action, obs, reward)
-            if config.env.env in ['Atari', 'Octax']:
+            if config.env.env == 'Atari':
                 game_trajs[i].snapshot_lst.append(envs[i].ale.cloneState())
+            elif config.env.env == 'Octax':
+                game_trajs[i].snapshot_lst.append([])
             else:
                 game_trajs[i].snapshot_lst.append(envs[i].physics.get_state())
 

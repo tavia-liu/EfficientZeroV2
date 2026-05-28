@@ -4,9 +4,9 @@ agent_name: octax_agent
 # env setting
 env:
   env: Octax
-  game: Octax-Brix-v0
+  game: brix
   base_seed: 0
-  n_skip: 1
+  n_skip: 4
   n_stack: 4
   max_episode_steps: 4500
   gray_scale: True         # CHIP-8 is binary 1-bit, single channel
