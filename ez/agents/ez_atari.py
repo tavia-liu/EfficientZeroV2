@@ -92,7 +92,8 @@ class EZAtariAgent(Agent):
         representation_model = RepresentationNetwork(self.input_shape, self.num_blocks, self.num_channels, self.down_sample)
 
         dynamics_model = DynamicsNetwork(self.num_blocks, self.num_channels, self.action_space_size,
-                                         action_embedding=self.action_embedding, action_embedding_dim=self.action_embedding_dim)
+                                         action_embedding=self.action_embedding, action_embedding_dim=self.action_embedding_dim,
+                                         state_shape=state_shape[1:])
 
         value_policy_model = ValuePolicyNetwork(self.num_blocks, self.num_channels, self.reduced_channels, flatten_size,
                                                      self.fc_layers, self.config.model.value_support.size,
