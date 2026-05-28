@@ -53,8 +53,8 @@ def start_ddp_trainer(rank, config):
     agent = agents.names[config.agent_name](config)         # update config
     manager = None
     num_gpus = torch.cuda.device_count()
-    num_cpus = multiprocessing.cpu_count()
-    ray.init(num_gpus=num_gpus, num_cpus=num_cpus, object_store_memory=150 * 1024 * 1024 * 1024 if config.env.image_based else 100 * 1024 * 1024 * 1024)
+    num_cpus = int(os.environ.get('SLURM_CPUS_PER_TASK', multiprocessing.cpu_count()))
+    ray.init(num_gpus=num_gpus, num_cpus=num_cpus, object_store_memory=20 * 1024 * 1024 * 1024)
     set_seed(config.env.base_seed + rank >= 0)              # set seed
     # set log
 
@@ -66,7 +66,7 @@ def start_ddp_trainer(rank, config):
             logger = wandb.init(
                 name=wandb_name,
                 project=config.wandb.project,
-                # config=config,
+                config=OmegaConf.to_container(config, resolve=True),
             )
         else:
             logger = None

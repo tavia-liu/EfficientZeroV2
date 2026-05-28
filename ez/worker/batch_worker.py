@@ -803,7 +803,7 @@ class BatchWorker(Worker):
             **self.config.mcts,  # pass mcts related params
             **self.config.model,  # pass the value and reward support params
         )
-        if self.env == 'Atari':
+        if self.env in ['Atari', 'Octax']:
             if self.config.mcts.use_gumbel:
                 r_values, r_policies, best_actions, _ = tree.search(
                     self.model,

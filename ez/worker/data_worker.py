@@ -127,7 +127,7 @@ class DataWorker(Worker):
                 **config.mcts,  # pass mcts related params
                 **config.model,  # pass the value and reward support params
             )
-            if self.config.env.env == 'Atari':
+            if self.config.env.env in ['Atari', 'Octax']:
                 if self.config.mcts.use_gumbel:
                     r_values, r_policies, best_actions, _ = tree.search(self.model, num_envs, states, values, policies,
                                                                         # use_gumble_noise=False, # for test search
