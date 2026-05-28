@@ -45,11 +45,12 @@ class OctaxWrapper(gym.Env):
         )
 
     def _frames_to_obs(self, frames):
-        # frames: (frame_skip, H, W) jax array of 0/1. Max-pool over time, scale
-        # to uint8, add channel dim. Mirrors Atari's MaxAndSkip semantics.
-        frame = np.asarray(jnp.max(frames, axis=0))
-        frame = (frame.astype(np.uint8) * 255)[..., None]
-        return frame
+        # frames: (frame_skip, W=64, H=32) bool. Octax stores display width-major
+        # (see octax.constants.SCREEN_WIDTH/HEIGHT). Max-pool over time, transpose
+        # to (H, W), scale to uint8, add channel dim → standard HWC.
+        frame = np.asarray(jnp.max(frames, axis=0))      # (64, 32)
+        frame = (frame.astype(np.uint8) * 255).T         # (32, 64)
+        return frame[..., None]                          # (32, 64, 1)
 
     def _format(self, obs):
         if self.obs_to_string:
