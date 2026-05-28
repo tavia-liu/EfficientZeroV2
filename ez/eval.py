@@ -172,7 +172,7 @@ def eval(agent, model, n_episodes, save_path, config, max_steps=None, use_pb=Fal
 
         j = 0
         for frame, reward in zip(frames[i], rewards[i]):
-            frame = Image.fromarray(frame)
+            frame = Image.fromarray(frame.squeeze(-1) if frame.ndim == 3 and frame.shape[-1] == 1 else frame)
             draw = ImageDraw.Draw(frame)
             if config.env.game == 'hopper_hop':
                 draw.text((5, 5), f'mu={game_trajs[i].action_lst[j][0]:.2f},{game_trajs[i].action_lst[j][1]:.2f}')
