@@ -127,7 +127,8 @@ def train(rank, agent, manager, logger, config):
         join_workers(workers, server_lst)
 
     # return
-    dist.destroy_process_group()
+    if dist.is_initialized():
+        dist.destroy_process_group()
     return final_weights
 
 
