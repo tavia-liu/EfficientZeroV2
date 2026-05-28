@@ -5,6 +5,7 @@ __pycache__/
 *.so
 *.o
 *.log
+.DS_Store
 
 
 # Pycharm
