@@ -6,6 +6,9 @@ state behind a stateful, classic-gym (4-tuple) interface that EZv2's data
 pipeline consumes, and emits grayscale `uint8` frames at CHIP-8's native 32x64.
 """
 
+import os
+os.environ.setdefault("JAX_PLATFORMS", "cpu")  # keep JAX off the GPU; PyTorch owns it
+
 import gym
 import jax
 import jax.numpy as jnp
