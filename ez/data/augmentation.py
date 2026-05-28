@@ -19,17 +19,23 @@ class RandomShiftsAug(nn.Module):
 
     def forward(self, x):
         n, c, h, w = x.size()
-        assert h == w
         padding = tuple([self.pad] * 4)
         x = F.pad(x, padding, 'replicate')
-        eps = 1.0 / (h + 2 * self.pad)
-        arange = torch.linspace(-1.0 + eps,
-                                1.0 - eps,
-                                h + 2 * self.pad,
-                                device=x.device,
-                                dtype=x.dtype)[:h]
-        arange = arange.unsqueeze(0).repeat(h, 1).unsqueeze(2)
-        base_grid = torch.cat([arange, arange.transpose(1, 0)], dim=2)
+        eps_h = 1.0 / (h + 2 * self.pad)
+        eps_w = 1.0 / (w + 2 * self.pad)
+        arange_h = torch.linspace(-1.0 + eps_h,
+                                  1.0 - eps_h,
+                                  h + 2 * self.pad,
+                                  device=x.device,
+                                  dtype=x.dtype)[:h]
+        arange_w = torch.linspace(-1.0 + eps_w,
+                                  1.0 - eps_w,
+                                  w + 2 * self.pad,
+                                  device=x.device,
+                                  dtype=x.dtype)[:w]
+        grid_x = arange_w.unsqueeze(0).repeat(h, 1).unsqueeze(2)
+        grid_y = arange_h.unsqueeze(1).repeat(1, w).unsqueeze(2)
+        base_grid = torch.cat([grid_x, grid_y], dim=2)
         base_grid = base_grid.unsqueeze(0).repeat(n, 1, 1, 1)
 
         shift = torch.randint(0,
@@ -37,7 +43,8 @@ class RandomShiftsAug(nn.Module):
                               size=(n, 1, 1, 2),
                               device=x.device,
                               dtype=x.dtype)
-        shift *= 2.0 / (h + 2 * self.pad)
+        shift *= torch.tensor([2.0 / (w + 2 * self.pad), 2.0 / (h + 2 * self.pad)],
+                              device=x.device, dtype=x.dtype)
 
         grid = base_grid + shift
         return F.grid_sample(x,
