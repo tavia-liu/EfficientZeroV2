@@ -84,5 +84,6 @@ def join_workers(worker_lst, server_lst):
     ray.kill(storage_server)
     ray.kill(replay_buffer_server)
     ray.kill(watchdog_server)
+    smos_server.queue.shutdown()
     print(f'[main process] All servers have stopped.')
 
