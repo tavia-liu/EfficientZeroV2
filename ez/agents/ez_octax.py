@@ -4,7 +4,7 @@ import time
 from omegaconf import open_dict
 
 from ez.agents.ez_atari import EZAtariAgent
-from ez.envs import make_gym
+from ez.envs import make_octax
 from ez.utils.format import DiscreteSupport
 
 
@@ -15,7 +15,7 @@ class EZOctaxAgent(EZAtariAgent):
     def update_config(self):
         assert not self._update
 
-        env = make_gym(self.config.env.game, seed=0, save_path=None, **self.config.env)
+        env = make_octax(self.config.env.game, seed=0, save_path=None, **self.config.env)
         action_space_size = env.action_space.n
 
         obs_channel = 1 if self.config.env.gray_scale else 3
