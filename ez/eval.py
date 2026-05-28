@@ -112,7 +112,7 @@ def eval(agent, model, n_episodes, save_path, config, max_steps=None, use_pb=Fal
         # tree search for policies
         tree = mcts.names[config.mcts.language](
             # num_actions=config.env.action_space_size if config.env.env == 'Atari' else config.mcts.num_top_actions,
-            num_actions=config.env.action_space_size if config.env.env == 'Atari' else config.mcts.num_sampled_actions,
+            num_actions=config.env.action_space_size if config.env.env in ['Atari', 'Octax'] else config.mcts.num_sampled_actions,
             discount=config.rl.discount,
             env=config.env.env,
             **config.mcts,  # pass mcts related params

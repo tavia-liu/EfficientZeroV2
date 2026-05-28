@@ -797,7 +797,7 @@ class BatchWorker(Worker):
         # temperature
         temperature = self.agent.get_temperature(trained_steps=trained_steps) #* np.ones((batch_size, 1))
         tree = mcts.names[self.config.mcts.language](
-            num_actions=self.action_space_size if self.env == 'Atari' else self.config.mcts.num_sampled_actions,
+            num_actions=self.action_space_size if self.env in ['Atari', 'Octax'] else self.config.mcts.num_sampled_actions,
             discount=self.config.rl.discount,
             env=self.env,
             **self.config.mcts,  # pass mcts related params
