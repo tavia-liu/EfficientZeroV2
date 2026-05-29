@@ -253,6 +253,7 @@ class Agent:
                     eval_score = eval_scalar['eval/mean_score']
                     min_score, max_score = eval_scalar['eval/min_score'], eval_scalar['eval/max_score']
                     eval_counter, eval_best_score = ray.get([storage.get_eval_counter.remote(), storage.get_best_score.remote()])
+                    eval_scalar['eval/counter'] = eval_counter
 
                     eval_log_str = 'Eval {} at at step {}, score = {:.3f}(min: {:.3f}, max: {:.3f}), ' \
                                    'best score over past evaluation = {:.3f}' \
@@ -872,19 +873,17 @@ def train_ddp(agent, rank, replay_buffer, storage, batch_storage, logger):
             if remote_scalar.get('self_play/episode_return'):
                 self_play_reteurn = remote_scalar.get('self_play/episode_return')
             if len(eval_scalar) > 0:
-                # TODO: fix the counter issue
-                # logger.log(eval_scalar, eval_counter)
-                logger.log(eval_scalar, step_count)
-
                 eval_score = eval_scalar['eval/mean_score']
                 min_score, max_score = eval_scalar['eval/min_score'], eval_scalar['eval/max_score']
                 eval_counter, eval_best_score = ray.get([storage.get_eval_counter.remote(), storage.get_best_score.remote()])
+                eval_scalar['eval/counter'] = eval_counter
 
                 eval_log_str = 'Eval {} at at step {}, score = {:.3f}(min: {:.3f}, max: {:.3f}), ' \
                                'best score over past evaluation = {:.3f}' \
                                ''.format(agent.config.env.game, eval_counter, eval_score, min_score, max_score,
                                          eval_best_score)
                 eval_logger.info(eval_log_str)
+                logger.log(eval_scalar, step_count)
                 print('[Eval] ', eval_log_str)
 
             # replay statistics

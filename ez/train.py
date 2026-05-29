@@ -70,6 +70,8 @@ def start_ddp_trainer(rank, config):
                 job_type=config.env.game,
                 config=OmegaConf.to_container(config, resolve=True),
             )
+            logger.define_metric('eval/counter')
+            logger.define_metric('eval/*', step_metric='eval/counter')
         else:
             logger = None
         # file logger
