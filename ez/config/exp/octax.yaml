@@ -11,7 +11,7 @@ env:
   max_episode_steps: 4500
   gray_scale: True
   image_based: True
-  clip_reward: True
+  clip_reward: False
   obs_shape: [1, 32, 64]
   episodic: True
 
@@ -140,7 +140,7 @@ model:
 
 actors:
   data_worker: 1
-  batch_worker: 8
+  batch_worker: 2
 
 wandb:
   project: 'ez-v2-octax'
