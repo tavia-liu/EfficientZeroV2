@@ -45,10 +45,12 @@ class EvalWorker(Worker):
                 model_path = Path(self.config.save_path) / 'model.p'
                 eval_score = eval(self.agent, model, self.config.train.eval_n_episode, save_path, self.config,
                                        max_steps=eval_steps, use_pb=False, verbose=0)
-                mean_score = eval_score.mean()
-                std_score = eval_score.std()
-                min_score = eval_score.min()
-                max_score = eval_score.max()
+                eval_score = np.asarray(eval_score, dtype=np.float32)
+                mean_score = float(eval_score.mean())
+                std_score = float(eval_score.std())
+                min_score = float(eval_score.min())
+                max_score = float(eval_score.max())
+                median_score = float(np.median(eval_score))
 
                 if mean_score >= best_eval_score:
                     best_eval_score = mean_score
@@ -60,7 +62,8 @@ class EvalWorker(Worker):
                     'eval/mean_score': mean_score,
                     'eval/std_score': std_score,
                     'eval/max_score': max_score,
-                    'eval/min_score': min_score
+                    'eval/min_score': min_score,
+                    'eval/median_score': median_score
                 })
 
             time.sleep(10)
