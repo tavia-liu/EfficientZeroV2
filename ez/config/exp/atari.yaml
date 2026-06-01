@@ -4,8 +4,8 @@ agent_name: atari_agent
 # env setting
 env:
   env: Atari
-  game: Asterix
-  base_seed: 0
+  game: ${oc.env:GAME,Asterix}
+  base_seed: ${oc.decode:${oc.env:SEED,0}}
   n_skip: 4
   n_stack: 4
   max_episode_steps: 3000 # 27000 for final test
