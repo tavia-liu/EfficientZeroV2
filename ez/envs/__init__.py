@@ -5,7 +5,6 @@ from .gym import GymWrapper
 from .atari import AtariWrapper
 from .dmc import DMCWrapper
 from .wrapper import *
-from .octax import OctaxWrapper
 import random
 from dm_env import specs
 from ez.utils.format import arr_to_str
@@ -139,6 +138,8 @@ def make_gym(game_name, seed, save_path=None, **kwargs):
 
 def make_octax(game_name, seed, save_path=None, **kwargs):
     """Make an Octax env using the Atari-style discrete image pipeline."""
+    from .octax import OctaxWrapper
+
     obs_to_string = kwargs.get('obs_to_string')
     clip_reward = kwargs.get('clip_reward')
     frame_skip = kwargs['n_skip'] if kwargs.get('n_skip') else 4
