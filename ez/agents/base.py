@@ -143,6 +143,9 @@ class Agent:
         # some logs
         total_time = 0
         total_steps = self.config.train.training_steps + self.config.train.offline_training_steps
+        wall_start_time = time.time()
+        wall_slope_start_step = None
+        wall_slope_start_time = None
         if is_main_process:
             pb = tqdm(np.arange(total_steps), leave=True)
 
@@ -217,6 +220,15 @@ class Agent:
             if is_main_process and step_count % pb_interval == 0:
                 left_steps = (self.config.train.training_steps + self.config.train.offline_training_steps - step_count)
                 left_time = (left_steps * avg_time) / 3600
+                wall_elapsed = end_time - wall_start_time
+                if wall_slope_start_step is None and step_count >= 1000:
+                    wall_slope_start_step = step_count
+                    wall_slope_start_time = wall_elapsed
+                if wall_slope_start_step is not None and step_count > wall_slope_start_step:
+                    wall_sec_per_step = (wall_elapsed - wall_slope_start_time) / (step_count - wall_slope_start_step)
+                else:
+                    wall_sec_per_step = wall_elapsed / max(step_count, 1)
+                wall_estimated_total_time = wall_sec_per_step * total_steps / 3600
                 batch_queue_size = batch_storage.get_len()
                 train_log_str = '[Train] {}, step {}/{}, {:.3f}h left. lr={:.3f}, avg time={:.3f}s, batchQ={}, '\
                                 'self-play return={:.3f}, collect {}/{:.3f}k, eval score={:.3f}/{:.3f}. '\
@@ -236,6 +248,9 @@ class Agent:
                     'train/step_per_second (s)': end_time - start_time,
                     'train/total time (h)': total_time / 3600,
                     'train/avg time (s)': avg_time,
+                    'train/wall elapsed time (h)': wall_elapsed / 3600,
+                    'train/wall sec per step': wall_sec_per_step,
+                    'train/wall estimated total time (h)': wall_estimated_total_time,
                     'train/lr': lr,
                     'train/queue size': batch_queue_size
                 })
