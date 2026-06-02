@@ -1,12 +1,9 @@
 import os
-import dmc2gym
 from gym.wrappers import Monitor
 from .gym import GymWrapper
 from .atari import AtariWrapper
-from .dmc import DMCWrapper
 from .wrapper import *
 import random
-from dm_env import specs
 from ez.utils.format import arr_to_str
 
 
@@ -166,6 +163,9 @@ def make_dmc(game_name, seed, save_path=None, **kwargs):
             observation is image or state
 
     """
+    import dmc2gym
+    from .dmc import DMCWrapper
+
     # params
     if 'CMU' in game_name:
         domain_name, task_name = game_name.rsplit('_', 1)
