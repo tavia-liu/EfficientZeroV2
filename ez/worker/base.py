@@ -33,7 +33,7 @@ class Worker:
 
     def get_recent_model(self, trained_steps, model_name):
         assert self.model_update_interval > 0
-        assert self.model
+        assert self.model is not None
 
         new_model_index = trained_steps // self.model_update_interval
         if new_model_index > self.last_model_index:
