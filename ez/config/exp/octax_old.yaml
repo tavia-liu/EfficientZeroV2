@@ -49,16 +49,16 @@ train:
   eval_interval: 10000
 
   self_play_update_interval: 100
-  reanalyze_update_interval: 400
+  reanalyze_update_interval: 200
   save_ckpt_interval: 10000
 
   mini_batch_size: 256
   reanalyze_ratio: 1.0
 
   reward_loss_coeff: 1.0
-  value_loss_coeff: 0.25
+  value_loss_coeff: 0.5
   policy_loss_coeff: 1.0
-  consistency_coeff: 2.0
+  consistency_coeff: 5.0
   decorrelation_coeff: 0.01
   off_diag_coeff: 5e-3
   entropy_coeff: 5e-3
@@ -76,8 +76,8 @@ train:
   value_target: 'mixed'
   use_IQL: False
   IQL_weight: 0.7
-  start_use_mix_training_steps: 4e4
-  mixed_value_threshold: 2e4
+  start_use_mix_training_steps: 3e4
+  mixed_value_threshold: 5e3
 
 data:
   num_envs: 4
