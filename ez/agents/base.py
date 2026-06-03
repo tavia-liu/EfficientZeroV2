@@ -275,7 +275,9 @@ class Agent:
                                    ''.format(self.config.env.game, eval_counter, eval_score, min_score, max_score,
                                              eval_best_score)
                     eval_logger.info(eval_log_str)
-                    logger.log(eval_scalar, eval_counter)
+                    # TODO: fix the counter issue
+                    # logger.log(eval_scalar, eval_counter)
+                    logger.log(eval_scalar, step_count)
                     print('[Eval] ', eval_log_str)
 
                 # replay statistics
@@ -896,7 +898,7 @@ def train_ddp(agent, rank, replay_buffer, storage, batch_storage, logger):
                                ''.format(agent.config.env.game, eval_counter, eval_score, min_score, max_score,
                                          eval_best_score)
                 eval_logger.info(eval_log_str)
-                logger.log(eval_scalar, eval_counter)
+                logger.log(eval_scalar, step_count)
                 print('[Eval] ', eval_log_str)
 
             # replay statistics
