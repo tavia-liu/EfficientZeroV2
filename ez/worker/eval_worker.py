@@ -57,13 +57,18 @@ class EvalWorker(Worker):
                     self.storage.set_best_score.remote(best_eval_score)
                     torch.save(model.state_dict(), model_path)
 
-                self.storage.set_eval_counter.remote(counter)
+                # store evaluation index (episodes) as eval_counter so WandB's
+                # `eval/counter` represents evaluation number (0,1,2,...)
+                # also keep the training step in the scalar so it's available
+                # as `eval/train_step` if needed for charts
+                self.storage.set_eval_counter.remote(episodes)
                 self.storage.add_eval_log_scalar.remote({
                     'eval/mean_score': mean_score,
                     'eval/std_score': std_score,
                     'eval/max_score': max_score,
                     'eval/min_score': min_score,
-                    'eval/median_score': median_score
+                    'eval/median_score': median_score,
+                    'eval/train_step': counter
                 })
 
             time.sleep(10)
