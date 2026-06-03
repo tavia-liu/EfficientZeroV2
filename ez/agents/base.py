@@ -275,7 +275,10 @@ class Agent:
                                    ''.format(self.config.env.game, eval_counter, eval_score, min_score, max_score,
                                              eval_best_score)
                     eval_logger.info(eval_log_str)
-                    logger.log(eval_scalar, eval_counter)
+                    # log against the eval/counter step_metric (defined in train.py);
+                    # do NOT pass eval_counter as wandb's global step, or eval points
+                    # get dropped (step must be monotonic) and runs won't align.
+                    logger.log(eval_scalar)
                     print('[Eval] ', eval_log_str)
 
                 # replay statistics
@@ -896,7 +899,9 @@ def train_ddp(agent, rank, replay_buffer, storage, batch_storage, logger):
                                ''.format(agent.config.env.game, eval_counter, eval_score, min_score, max_score,
                                          eval_best_score)
                 eval_logger.info(eval_log_str)
-                logger.log(eval_scalar, eval_counter)
+                # log against the eval/counter step_metric (defined in train.py);
+                # do NOT pass eval_counter as wandb's global step.
+                logger.log(eval_scalar)
                 print('[Eval] ', eval_log_str)
 
             # replay statistics
