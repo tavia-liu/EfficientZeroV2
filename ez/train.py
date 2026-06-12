@@ -53,7 +53,9 @@ def start_ddp_trainer(rank, config):
     agent = agents.names[config.agent_name](config)         # update config
     manager = None
     num_gpus = torch.cuda.device_count()
-    num_cpus = int(os.environ.get('SLURM_CPUS_PER_TASK', multiprocessing.cpu_count()))
+    num_cpus = int(os.environ.get('SLURM_CPUS_PER_TASK')
+                   or os.environ.get('LSB_DJOB_NUMPROC')
+                   or multiprocessing.cpu_count())
     ray.init(num_gpus=num_gpus, num_cpus=num_cpus, object_store_memory=20 * 1024 * 1024 * 1024)
     set_seed(config.env.base_seed + rank >= 0)              # set seed
     # set log
