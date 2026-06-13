@@ -66,6 +66,7 @@ def start_ddp_trainer(rank, config):
             wandb_name = f'{config.env.game}-seed{config.env.base_seed}'
             print(f'wandb_name={wandb_name}')
             logger = wandb.init(
+                entity="WashU-MARL",
                 name=wandb_name,
                 project=config.wandb.project,
                 group=config.wandb.group,
