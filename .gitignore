@@ -10,6 +10,9 @@ __pycache__/
 # Pycharm
 .idea/*
 
+# Claude Code local settings
+.claude/
+
 # results dir
 .hydra
 /results

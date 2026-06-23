@@ -77,18 +77,15 @@ def join_workers(worker_lst, server_lst):
     data_workers, batch_workers, eval_worker = worker_lst
     storage_server, replay_buffer_server, watchdog_server, smos_server = server_lst
 
-    # wait for all workers to finish
-    for data_worker in data_workers:
-        data_worker.join()
-    for batch_worker in batch_workers:
-        batch_worker.join()
-    eval_worker.join()
+    # Ray actors run until the cluster shuts down; nothing to join here.
     print(f'[main process] All workers have stopped.')
 
-    # stop servers
-    storage_server.terminate()
-    replay_buffer_server.terminate()
-    watchdog_server.terminate()
-    smos_server.stop()
+    # stop servers (Ray actors use ray.kill, not .terminate())
+    ray.kill(storage_server)
+    ray.kill(replay_buffer_server)
+    ray.kill(watchdog_server)
+    shutdown = getattr(smos_server.queue, 'shutdown', None)
+    if shutdown is not None:
+        shutdown()
     print(f'[main process] All servers have stopped.')
 
