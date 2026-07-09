@@ -154,3 +154,4 @@ actors:
 wandb:
   project: 'ez-v2-release'
   tag: 'Atari'
+  group: 'code_config'
